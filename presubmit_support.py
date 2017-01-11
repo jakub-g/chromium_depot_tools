@@ -1375,6 +1375,12 @@ class PresubmitExecuter(object):
       exec script_text in context
     except Exception, e:
       raise PresubmitFailure('"%s" had an exception.\n%s' % (presubmit_path, e))
+    
+    
+    result = ()
+    return result
+
+
 
     # These function names must change if we make substantial changes to
     # the presubmit API that are not backwards compatible.
@@ -1384,9 +1390,9 @@ class PresubmitExecuter(object):
       function_name = 'CheckChangeOnUpload'
     if function_name in context:
       context['__args'] = (input_api, OutputApi(self.committing))
-      logging.debug('Running %s in %s' % (function_name, presubmit_path))
+      logging.warning('Running %s in %s' % (function_name, presubmit_path))
       result = eval(function_name + '(*__args)', context)
-      logging.debug('Running %s done.' % function_name)
+      logging.warning('Running %s done.' % function_name)
       if not (isinstance(result, types.TupleType) or
               isinstance(result, types.ListType)):
         raise PresubmitFailure(
